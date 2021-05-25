@@ -7,7 +7,7 @@
 
  ## How combine is working?
 
- Instead of being concerned with the actual values actions and states and handling transformation synchronously with huge overhead knowing which data belongs to which part, combine suggests to design some kind of a funnel that is ready to process those values/events/states using operators, and hands them asynchronously to all subscribers regardless which thread they're listening to.
+ Instead of being concerned with the actual values actions and states and handling transformation synchronously with huge overhead knowing which data belongs to which part at which exact time, combine suggests to design some kind of a funnel that is ready to process those values/events/states using functions and operators, and hands them asynchronously to all subscribers regardless which thread they're listening to.
 
  ## Main components of combine
 
@@ -27,7 +27,7 @@
  Defines when and how to execute a closure (which thread, what to do when receiving a specific event, when to complete and when to fail)
 
 
- - What are we covering in today's introduction workshop
+## What are we covering in today's introduction workshop
  - Publishers ✅
  - Operators ✅
  - Subscribers ✅
@@ -245,6 +245,13 @@ print("currentValue of currentValueSubject: \(currentValueSubject.value)")
 
  ## What are the benefits of using combine
 
+ - Declarative (ready to work with SwiftUI).
+ - Deeply integrated within swift language.
+ - Reduces the usage of if-else and the need to check state and values over time.
+ - Utilizes functional programming.
+ - Reduces the usage of boilerplate code for patterns like (responders, delegation, notification.
+ - Easier to read by incapsulating the business logic within events, operators and functions, and the states within the async publish-subscribe pattern.
+ - Eliminate troublesome techniques like nested closures and convention-based callbacks.
  ## Readability issues
  */
 
