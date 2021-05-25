@@ -42,29 +42,29 @@ struct Repository: Codable {
 Decode the JSON in the reciveValue block.
 */
 
-//let cancellable = publisher.sink(
-//    receiveCompletion: { completion in
-//        switch completion {
-//        case .failure(let error):
-//            print(error)
-//        case .finished:
-//            print("Success")
-//        }
-//    },
-//    receiveValue: { value in
-//        let decoder = JSONDecoder()
-//
-//        do {
-//            // Since each value passed into our closure will be a tuple
-//            // containing the downloaded data, as well as the network
-//            // response itself, we're accessing the 'data' property here:
-//            let repo = try decoder.decode(Repository.self, from: value.data)
-//            print(repo)
-//        } catch {
-//            print(error)
-//        }
-//    }
-//)
+let decodedCancellable = publisher.sink(
+    receiveCompletion: { completion in
+        switch completion {
+        case .failure(let error):
+            print(error)
+        case .finished:
+            print("Success")
+        }
+    },
+    receiveValue: { value in
+        let decoder = JSONDecoder()
+
+        do {
+            // Since each value passed into our closure will be a tuple
+            // containing the downloaded data, as well as the network
+            // response itself, we're accessing the 'data' property here:
+            let repo = try decoder.decode(Repository.self, from: value.data)
+            print(repo)
+        } catch {
+            print(error)
+        }
+    }
+)
 
 /*:
  ## Operators
@@ -78,7 +78,7 @@ let dataPublisher = publisher.map(\.data)
 let repoPublisher = publisher
     .map(\.data)
     .decode(type: Repository.self, decoder: JSONDecoder())
-
+    
 let repoSubcriber = repoPublisher.sink(
     receiveCompletion: { completion in
         switch completion {
@@ -89,6 +89,37 @@ let repoSubcriber = repoPublisher.sink(
         }
     },
     receiveValue: { repo in
-        print(repo)
+        print("data by using operators", repo)
     }
 )
+
+/*:
+ ## Any Cancellable
+ 
+ * A type-erasing cancellable object that executes a provided closure when canceled.
+ * Normally we create a cancellable store which takes care of subscription cancellations
+ 
+*/
+
+var cancellableStore = Set<AnyCancellable>()
+
+let cancellableStorePublisher = publisher
+    .map(\.data)
+    .decode(type: Repository.self, decoder: JSONDecoder())
+    
+cancellableStorePublisher.sink(
+    receiveCompletion: { completion in
+        switch completion {
+        case .failure(let error):
+            print(error)
+        case .finished:
+            print("Success")
+        }
+    },
+    receiveValue: { repo in
+        print("data by using operators", repo)
+    }
+).store(in: &cancellableStore)
+
+/// For custom cancelation of subcriptions
+/// cancellableStore.forEach { $0.cancel() }
