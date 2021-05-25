@@ -2,7 +2,7 @@
  # HelloFresh-iOS-Combine-Workshop
 
  &nbsp;
- * [First Example](First%20Example)
+ * [First Workshop](First%20Workshop)
  &nbsp;
 
  [Next >](@next)
